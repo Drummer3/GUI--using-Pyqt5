@@ -4,26 +4,9 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import (QApplication, QWidget, QTableWidget, QTableWidgetItem, QPushButton, QGridLayout, QGroupBox, QVBoxLayout, QLineEdit, QLabel, QComboBox, QDateEdit)
 
+
 names = ["თარიღი", "დასახელება", "რაოდენობა", "ზომის ერთეული", "ერთ.ფასი", "ჯამური ფასი"]
-arr = []
-def read_table(con):
-    cur = con.cursor()
-    cur.execute("SELECT * FROM List")
 
-    rows = cur.fetchall()
-
-    for row in rows:
-        arr.append(row)
-    cur.close()
-try:
-    con = sqlite3.connect("database.db")
-    read_table(con)
-except sqlite3.Error as e:
-    print(e)
-
-sum = 0
-for i in range(len(arr)-1):
-    sum += int(arr[i][5])
 # მთავარი ფანჯარა
 # მთავარი ფანჯარა
 # მთავარი ფანჯარა
@@ -48,6 +31,9 @@ class Window(QWidget):
         gridLayout = QGridLayout()
         self.table = self.createTable()
         gridLayout.addWidget(self.table, 0, 0, 1, 2)
+        sum = 0
+        for i in range(len(self.arr)-1):
+            sum += int(self.arr[i][5])
         self.sum = QLabel(f"ჯამი: {sum}")
         self.sum.setAlignment(QtCore.Qt.AlignRight)
         self.sum.setFont(QtGui.QFont("", 14, QtGui.QFont.Bold))
@@ -63,8 +49,10 @@ class Window(QWidget):
 
     def createTable(self):
         self.tableWidget = QTableWidget()
-        self.tableWidget.setRowCount( 19 )
+        
         self.tableWidget.setColumnCount(len(names))
+        self.open_db()
+        self.tableWidget.setRowCount( len(self.arr) + 2 )
         self.setData()
         header = self.tableWidget.horizontalHeader()
         header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
@@ -72,16 +60,32 @@ class Window(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(names)
         return self.tableWidget
 
+    
+    def read_table(self,con):
+        self.arr = []
+        cur = con.cursor()
+        cur.execute("SELECT * FROM List")
+        rows = cur.fetchall()
+        for row in rows:
+            self.arr.append(row)
+        cur.close()
+    def open_db(self):
+        try:
+            con = sqlite3.connect("database.db")
+            self.read_table(con)
+        except sqlite3.Error as e:
+            e = 1
+    
     def setData(self):
-        for i in range(len(arr)):
-            for j in range(len(arr[i])):
-                newitem = QTableWidgetItem(str(arr[i][j]))
+        for i in range(len(self.arr)):
+            for j in range(len(self.arr[i])):
+                newitem = QTableWidgetItem(str(self.arr[i][j]))
                 self.tableWidget.setItem(i, j, newitem)
-    # დამატების ფანჯარა
-    # დამატების ფანჯარა
-    # დამატების ფანჯარა
-    # დამატების ფანჯარა
-    # დამატების ფანჯარა
+    # დამატების ფუნქცია
+    # დამატების ფუნქცია
+    # დამატების ფუნქცია
+    # დამატების ფუნქცია
+    # დამატების ფუნქცია
     def addingProduct(self):
         self.adding = QWidget()
         self.adding.setWindowTitle('პროდუქტის დამატება')
@@ -145,15 +149,22 @@ class Window(QWidget):
                                     (Date, Name, Quantity, Unit, PricePer, PriceSum)
                                     VALUES
                                     ('{date}','{name}','{quantity}','{unit}','{eachprice}','{sumprice}')"""
-            count = cursor.execute(sqlite_insert_query)
+            cursor.execute(sqlite_insert_query)
             sqliteConnection.commit()
-            print(cursor.rowcount)
             cursor.close()
         except sqlite3.Error as error:
-            print(error)
+            error = 1
         finally:
             if (sqliteConnection):
                 sqliteConnection.close()
+        self.updateTableData()
+        self.adding.close()
+    def updateTableData(self):
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setRowCount( len(self.arr) + 2 )
+        self.open_db()
+        self.setData()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
