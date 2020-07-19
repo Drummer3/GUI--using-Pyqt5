@@ -44,6 +44,7 @@ class Window(QWidget):
         gridLayout.addWidget(self.button, 2, 0)
         self.button2 = QPushButton("რეალიზაცია", self)
         self.button2.setMinimumHeight(50)
+        self.button2.clicked.connect(self.subtractingProduct)
         gridLayout.addWidget(self.button2, 2, 1)
         self.groupBox.setLayout(gridLayout)
 
@@ -81,11 +82,11 @@ class Window(QWidget):
             for j in range(len(self.arr[i])):
                 newitem = QTableWidgetItem(str(self.arr[i][j]))
                 self.tableWidget.setItem(i, j, newitem)
+
     # დამატების ფუნქცია
     # დამატების ფუნქცია
     # დამატების ფუნქცია
-    # დამატების ფუნქცია
-    # დამატების ფუნქცია
+
     def addingProduct(self):
         self.adding = QWidget()
         self.adding.setWindowTitle('პროდუქტის დამატება')
@@ -165,7 +166,26 @@ class Window(QWidget):
         self.open_db()
         self.setData()
 
+    # რეალიზაციის ფუნქცია
+    # რეალიზაციის ფუნქცია
+    # რეალიზაციის ფუნქცია
 
+    def subtractingProduct(self):
+        self.subing = QWidget()
+        self.subing.setWindowTitle('პროდუქტის რეალიზაცია')
+        self.spCreateLayout()
+        self.spvbox = QVBoxLayout()
+        self.spvbox.addWidget(self.spGroupBox)
+        self.subing.setLayout(self.spvbox)
+        self.subing.show()
+
+    def spCreateLayout(self):
+        self.spGroupBox = QGroupBox()
+        self.spGridLayout = QGridLayout()
+        #spGridLayout.setSpacing(10)
+        self.spButton = QPushButton("რეალიზაცია",self)
+        self.spGridLayout.addWidget(self.spButton,0,0)
+        self.spGroupBox.setLayout(self.spGridLayout)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Window()
