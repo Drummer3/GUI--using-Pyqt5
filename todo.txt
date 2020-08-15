@@ -1,9 +1,1 @@
-project.py [135]
-
-project.py [138]
-
 Fixing Column length
-
-Adding that data to data.txt
-
-Refreshing DataTable
