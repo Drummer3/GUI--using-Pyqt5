@@ -1,8 +1,8 @@
 import sys
 import sqlite3
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import (QApplication, QWidget, QTableWidget, QTableWidgetItem, QPushButton, QGridLayout, QGroupBox, QVBoxLayout, QLineEdit, QLabel, QComboBox, QDateEdit)
+from PySyde2 import QtWidgets, QtCore, QtGui
+from PySyde2.QtCore import QDate
+from PySide2.QtWidgets import (QApplication, QWidget, QTableWidget, QTableWidgetItem, QPushButton, QGridLayout, QGroupBox, QVBoxLayout, QLineEdit, QLabel, QComboBox, QDateEdit)
 
 
 names = ["თარიღი", "დასახელება", "რაოდენობა", "ზომის ერთეული", "ერთ.ფასი", "ჯამური ფასი"]
